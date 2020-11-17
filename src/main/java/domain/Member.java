@@ -8,6 +8,10 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@NamedQuery(
+        name = "Member.findByName", //이름은 관례가 Entity명.** 임
+        query = "select m from Member m  where m.name = :name"
+)
 public class Member {
     @Id @GeneratedValue
     @Column(name = "MEMBER_ID")

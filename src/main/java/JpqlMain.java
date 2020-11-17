@@ -12,6 +12,9 @@ public class JpqlMain {
         tx.begin();
 
         try {
+            /**
+             * DB 초기화
+             */
             Team teamA = new Team();
             teamA.setName("팀A");
             em.persist(teamA);
@@ -42,14 +45,36 @@ public class JpqlMain {
             em.flush();
             em.clear();
 
-            String query ="select distinct t from Team t join fetch t.members";
+            /**
+             * 벌크 연산 예제
+             */
+            int resultCount = em.createQuery("update Member m set m.age = 20")
+                    .executeUpdate();
 
-            List<Team> result = em.createQuery(query, Team.class)
-                    .getResultList();
+            System.out.println("resultCount = " + resultCount);
 
-            for (Team team : result) {
-                System.out.println("team = " + team.getName() + "|" + team.getMembers().size());
-            }
+//            /**
+//             * NamedQuery 예제
+//             */
+//            List<Member> resultList = em.createNamedQuery("Member.findByName", Member.class)
+//                    .setParameter("name", "회원1")
+//                    .getResultList();
+//
+//            for (Member member : resultList) {
+//                System.out.println("member = " + member);
+//            }
+
+//            /**
+//             * 페치 조인 예제
+//             */
+//            String query ="select distinct t from Team t join fetch t.members";
+//
+//            List<Team> result = em.createQuery(query, Team.class)
+//                    .getResultList();
+//
+//            for (Team team : result) {
+//                System.out.println("team = " + team.getName() + "|" + team.getMembers().size());
+//            }
 
             tx.commit();
         } catch (Exception e){
